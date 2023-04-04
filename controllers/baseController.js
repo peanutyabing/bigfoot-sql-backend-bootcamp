@@ -7,7 +7,10 @@ class BaseController {
 
   getAll = async (req, res) => {
     try {
-      const table = await this.model.findAll({ order: [["date"]] });
+      const table = await this.model.findAll(
+        { where: req.query },
+        { order: [["date"]] }
+      );
       return res.json(table);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
