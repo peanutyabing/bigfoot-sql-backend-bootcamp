@@ -9,10 +9,10 @@ class BaseController {
 
   getAll = async (req, res) => {
     try {
-      const table = await this.model.findAll(
-        { where: this.processQueryParams(req.query) },
-        { order: [["date"]] }
-      );
+      const table = await this.model.findAll({
+        where: this.processQueryParams(req.query),
+        order: [["date"]],
+      });
       return res.json(table);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -20,14 +20,10 @@ class BaseController {
   };
 
   processQueryParams = (queryParams) => {
-    const year = queryParams.date;
-    const nextYear = (parseInt(year) + 1).toString();
-    if (year) {
+    if (queryParams.date) {
+      const [startDate, endDate] = queryParams.date.split("~");
       queryParams.date = {
-        [Op.between]: [
-          new Date(`${year}-01-01`).toISOString(),
-          new Date(`${nextYear}-01-01`).toISOString(),
-        ],
+        [Op.between]: [startDate, endDate],
       };
     }
     return queryParams;
