@@ -1,15 +1,16 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model) {
-    super(model);
+  constructor(sightingModel, commentModel) {
+    super(sightingModel);
+    this.commentModel = commentModel;
   }
 
   // Retrieve specific sighting
   getSighting = async (req, res) => {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.sightingModel.findByPk(sightingId);
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -18,7 +19,7 @@ class SightingsController extends BaseController {
 
   addSighting = async (req, res) => {
     try {
-      const newSighting = await this.model.create(req.body);
+      const newSighting = await this.sightingModel.create(req.body);
       console.log("Added new row with id", newSighting.id);
       return res.json(newSighting);
     } catch (err) {
@@ -27,10 +28,10 @@ class SightingsController extends BaseController {
   };
 
   updateSighting = async (req, res) => {
+    console.log(req.params);
+    console.log(req.body);
     try {
-      console.log(req.params);
-      console.log(req.body);
-      const updatedSighting = await this.model.update(req.body, {
+      const updatedSighting = await this.sightingModel.update(req.body, {
         where: { id: req.params.sightingId },
       });
       console.log("Updated ", updatedSighting[0], " row");
@@ -41,12 +42,26 @@ class SightingsController extends BaseController {
   };
 
   getComments = async (req, res) => {
+    const { sightingId } = req.params;
+    console.log(req.params);
     try {
-      console.log(req.params);
-      const { sightingId } = req.params;
-      const sighting = await this.model.findByPk(sightingId);
-      const comments = await sighting.getComments();
+      const comments = await this.commentModel.findAll({
+        where: { sightingId: sightingId },
+      });
       return res.json(comments);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  addComment = async (req, res) => {
+    const { sightingId } = req.params;
+    const requestBody = req.body;
+    requestBody.sightingId = sightingId;
+    try {
+      const newComment = await this.commentModel.create(requestBody);
+      console.log("Added new comment: ", newComment.dataValues);
+      return res.json(newComment);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
