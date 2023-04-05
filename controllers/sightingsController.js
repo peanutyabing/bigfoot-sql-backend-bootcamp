@@ -28,8 +28,6 @@ class SightingsController extends BaseController {
   };
 
   updateSighting = async (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
     try {
       const updatedSighting = await this.sightingModel.update(req.body, {
         where: { id: req.params.sightingId },
@@ -62,6 +60,18 @@ class SightingsController extends BaseController {
       const newComment = await this.commentModel.create(requestBody);
       console.log("Added new comment: ", newComment.dataValues);
       return res.json(newComment);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  updateComment = async (req, res) => {
+    try {
+      const updatedComment = await this.commentModel.update(req.body, {
+        where: { id: req.params.commentId },
+      });
+      console.log("Updated ", updatedComment[0], " comment");
+      return res.json(updatedComment);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
