@@ -6,11 +6,14 @@ class SightingsRouter {
     this.controller = controller;
   }
   routes() {
-    // we will insert routes into here later on
-    router.get("/", this.controller.getAll);
-    router.get("/:sightingId", this.controller.getOne);
-    router.post("/", this.controller.add);
-    router.put("/:sightingId", this.controller.update);
+    // sighting-related requests
+    router.get("/", this.controller.getAllSightings);
+    router.get("/:sightingId", this.controller.getSighting);
+    router.post("/", this.controller.addSighting);
+    router.put("/:sightingId", this.controller.updateSighting);
+
+    // comment-related requests
+    router.get("/:sightingId/comments", this.controller.getComments);
     return router;
   }
 }

@@ -10,8 +10,20 @@ module.exports = {
       },
       date: {
         type: Sequelize.DATE,
+        allowNull: false,
       },
-      location: {
+      country: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      region: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      city_town: {
+        type: Sequelize.STRING,
+      },
+      location_description: {
         type: Sequelize.STRING,
       },
       notes: {

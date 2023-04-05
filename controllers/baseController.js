@@ -7,7 +7,7 @@ class BaseController {
 
   /* All controllers that extend this BASE controller will have access to the below function **/
 
-  getAll = async (req, res) => {
+  getAllSightings = async (req, res) => {
     try {
       const table = await this.model.findAll({
         where: this.processQueryParams(req.query),

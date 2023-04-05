@@ -6,7 +6,7 @@ class SightingsController extends BaseController {
   }
 
   // Retrieve specific sighting
-  getOne = async (req, res) => {
+  getSighting = async (req, res) => {
     const { sightingId } = req.params;
     try {
       const sighting = await this.model.findByPk(sightingId);
@@ -16,7 +16,7 @@ class SightingsController extends BaseController {
     }
   };
 
-  add = async (req, res) => {
+  addSighting = async (req, res) => {
     try {
       const newSighting = await this.model.create(req.body);
       console.log("Added new row with id", newSighting.id);
@@ -26,7 +26,7 @@ class SightingsController extends BaseController {
     }
   };
 
-  update = async (req, res) => {
+  updateSighting = async (req, res) => {
     try {
       console.log(req.params);
       console.log(req.body);
@@ -35,6 +35,18 @@ class SightingsController extends BaseController {
       });
       console.log("Updated ", updatedSighting[0], " row");
       return res.json(updatedSighting);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getComments = async (req, res) => {
+    try {
+      console.log(req.params);
+      const { sightingId } = req.params;
+      const sighting = await this.model.findByPk(sightingId);
+      const comments = await sighting.getComments();
+      return res.json(comments);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
