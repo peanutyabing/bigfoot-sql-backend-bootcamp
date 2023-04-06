@@ -71,7 +71,7 @@ class SightingsController extends BaseController {
       const sighting = await this.sightingModel.findByPk(sightingId);
       const newComment = await this.commentModel.create(req.body);
       const addedComment = await sighting.addComment(newComment);
-      console.log("Added new comment: ", addedComment.dataValues);
+      console.log("Added new comment to: ", addedComment.dataValues);
       return res.json(addedComment);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
