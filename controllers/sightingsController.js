@@ -45,6 +45,7 @@ class SightingsController extends BaseController {
     try {
       const comments = await this.commentModel.findAll({
         where: { sightingId: sightingId },
+        order: [["created_at"]],
       });
       return res.json(comments);
     } catch (err) {
