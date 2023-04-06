@@ -52,14 +52,27 @@ class SightingsController extends BaseController {
     }
   };
 
+  // addComment = async (req, res) => {
+  //   const { sightingId } = req.params;
+  //   const requestBody = req.body;
+  //   requestBody.sightingId = sightingId;
+  //   try {
+  //     const newComment = await this.commentModel.create(requestBody);
+  //     console.log("Added new comment: ", newComment.dataValues);
+  //     return res.json(newComment);
+  //   } catch (err) {
+  //     return res.status(400).json({ error: true, msg: err });
+  //   }
+  // };
+
   addComment = async (req, res) => {
     const { sightingId } = req.params;
-    const requestBody = req.body;
-    requestBody.sightingId = sightingId;
     try {
-      const newComment = await this.commentModel.create(requestBody);
-      console.log("Added new comment: ", newComment.dataValues);
-      return res.json(newComment);
+      const sighting = await this.sightingModel.findByPk(sightingId);
+      const newComment = await this.commentModel.create(req.body);
+      const addedComment = await sighting.addComment(newComment);
+      console.log("Added new comment: ", addedComment.dataValues);
+      return res.json(addedComment);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
