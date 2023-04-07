@@ -1,8 +1,8 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(sightingModel, commentModel) {
-    super(sightingModel);
+  constructor(model, commentModel) {
+    super(model);
     this.commentModel = commentModel;
   }
 
@@ -10,7 +10,7 @@ class SightingsController extends BaseController {
   getSighting = async (req, res) => {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.sightingModel.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId);
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -19,7 +19,7 @@ class SightingsController extends BaseController {
 
   addSighting = async (req, res) => {
     try {
-      const newSighting = await this.sightingModel.create(req.body);
+      const newSighting = await this.model.create(req.body);
       console.log("Added new row with id", newSighting.id);
       return res.json(newSighting);
     } catch (err) {
@@ -29,7 +29,7 @@ class SightingsController extends BaseController {
 
   updateSighting = async (req, res) => {
     try {
-      const updatedSighting = await this.sightingModel.update(req.body, {
+      const updatedSighting = await this.model.update(req.body, {
         where: { id: req.params.sightingId },
       });
       console.log("Updated ", updatedSighting[0], " row");
@@ -69,7 +69,7 @@ class SightingsController extends BaseController {
   addComment = async (req, res) => {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.sightingModel.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId);
       const newComment = await this.commentModel.create(req.body);
       const addedComment = await sighting.addComment(newComment);
       console.log("Added new comment to: ", addedComment.dataValues);

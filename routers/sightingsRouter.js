@@ -7,7 +7,7 @@ class SightingsRouter {
   }
   routes() {
     // sighting-related requests
-    router.get("/", this.controller.getAllSightings);
+    router.get("/", this.controller.getAllWithFilter);
     router.get("/:sightingId", this.controller.getSighting);
     router.post("/", this.controller.addSighting);
     router.put("/:sightingId", this.controller.updateSighting);

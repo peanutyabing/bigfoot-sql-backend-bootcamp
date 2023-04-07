@@ -6,7 +6,7 @@ class CategoriesRouter {
     this.controller = controller;
   }
   routes() {
-    router.get("/", this.controller.getCategories);
+    router.get("/", this.controller.getAll);
     router.post("/", this.controller.addCategory);
     return router;
   }
