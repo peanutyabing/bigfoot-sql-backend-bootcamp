@@ -16,6 +16,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       sighting_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "sightings",
@@ -23,6 +24,7 @@ module.exports = {
         },
       },
       category_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "categories",

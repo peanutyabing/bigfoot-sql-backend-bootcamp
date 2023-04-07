@@ -9,16 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       date: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
       },
       country: {
-        type: Sequelize.STRING,
         allowNull: false,
+        type: Sequelize.STRING,
       },
       region: {
-        type: Sequelize.STRING,
         allowNull: false,
+        type: Sequelize.STRING,
       },
       city_town: {
         type: Sequelize.STRING,
@@ -27,6 +27,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       notes: {
+        allowNull: false,
         type: Sequelize.TEXT,
       },
       created_at: {
