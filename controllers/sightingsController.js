@@ -11,7 +11,13 @@ class SightingsController extends BaseController {
   getSighting = async (req, res) => {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {
+        include: {
+          model: this.categoryModel,
+          attributes: ["id", "name"],
+          through: { attributes: [] },
+        },
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
