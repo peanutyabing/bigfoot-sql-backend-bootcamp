@@ -3,7 +3,7 @@ const BaseController = require("./baseController");
 class CategoriesController extends BaseController {
   constructor(model, categoryModel) {
     super(model);
-    this.categoryModel = categoryModel;
+    this.model = categoryModel;
   }
 
   addCategory = async (req, res) => {
