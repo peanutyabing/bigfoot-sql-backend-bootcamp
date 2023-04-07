@@ -1,9 +1,10 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, categoryModel) {
     super(model);
     this.commentModel = commentModel;
+    this.categoryModel = categoryModel;
   }
 
   // Retrieve specific sighting
@@ -18,8 +19,28 @@ class SightingsController extends BaseController {
   };
 
   addSighting = async (req, res) => {
+    const {
+      date,
+      country,
+      region,
+      cityTown,
+      locationDescription,
+      notes,
+      categoryIds,
+    } = req.body;
     try {
-      const newSighting = await this.model.create(req.body);
+      const newSighting = await this.model.create({
+        date: date,
+        country: country,
+        region: region,
+        cityTown: cityTown,
+        locationDescription: locationDescription,
+        notes: notes,
+      });
+      const selectedCategories = await this.categoryModel.findAll({
+        where: { id: categoryIds },
+      });
+      newSighting.setCategories(selectedCategories);
       console.log("Added new row with id", newSighting.id);
       return res.json(newSighting);
     } catch (err) {
