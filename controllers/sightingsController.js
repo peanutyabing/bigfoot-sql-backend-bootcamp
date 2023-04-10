@@ -34,7 +34,7 @@ class SightingsController extends BaseController {
       locationDescription,
       notes,
       categoryIds, // array of integers, e.g. [1, 2]
-      intensityLevels, // array of integers of equal length as categoryIds
+      intensityLevels, // array of integers of equal length as categoryIds or empty array
     } = req.body;
     try {
       const newSighting = await this.model.create({
@@ -67,8 +67,10 @@ class SightingsController extends BaseController {
       cityTown,
       locationDescription,
       notes,
-      categoryIds,
+      categoryIds, // array of integers, e.g. [1, 2]
+      intensityLevels, // array of integers of equal length as categoryIds or empty array
     } = req.body;
+    const sightingId = req.params.sightingId;
     try {
       const update = await this.model.update(
         {
@@ -80,14 +82,29 @@ class SightingsController extends BaseController {
           notes: notes,
         },
         {
-          where: { id: req.params.sightingId },
+          where: { id: sightingId },
         }
       );
-      const updatedSighting = await this.model.findByPk(req.params.sightingId);
-      const selectedCategories = await this.categoryModel.findAll({
-        where: { id: categoryIds },
+
+      await this.sightingCategoryModel.destroy({
+        where: { sightingId: sightingId },
       });
-      updatedSighting.setCategories(selectedCategories);
+
+      for (let i = 0; i < categoryIds.length; i++) {
+        await this.sightingCategoryModel.create({
+          sightingId: sightingId,
+          categoryId: categoryIds[i],
+          intensity: intensityLevels[i],
+        });
+      }
+
+      const updatedSighting = await this.model.findByPk(sightingId, {
+        include: {
+          model: this.categoryModel,
+          attributes: ["id", "name"],
+          through: { attributes: ["intensity"] },
+        },
+      });
       console.log("Updated ", update[0], " row");
       return res.json(updatedSighting);
     } catch (err) {
