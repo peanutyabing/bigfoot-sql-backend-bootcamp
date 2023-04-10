@@ -31,6 +31,9 @@ module.exports = {
           key: "id",
         },
       },
+      intensity: {
+        type: Sequelize.INTEGER,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

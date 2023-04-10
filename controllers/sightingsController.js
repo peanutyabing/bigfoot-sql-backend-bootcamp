@@ -15,7 +15,7 @@ class SightingsController extends BaseController {
         include: {
           model: this.categoryModel,
           attributes: ["id", "name"],
-          through: { attributes: [] },
+          through: { attributes: ["intensity"] },
         },
       });
       return res.json(sighting);
