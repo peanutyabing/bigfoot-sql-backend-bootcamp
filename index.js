@@ -39,7 +39,7 @@ const categoriesRouter = new CategoriesRouter(categoriesController).routes();
 app.use("/sightings", sightingsRouter);
 app.use("/categories", categoriesRouter);
 
-const PORT = process.env.EXPRESS_PORT;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
